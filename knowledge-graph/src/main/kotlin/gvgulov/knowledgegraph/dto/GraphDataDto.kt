@@ -6,8 +6,14 @@ data class GraphDataDto(
     val nodes: List<NodeDataDto>,
     val edges: List<EdgeDataDto>
 ) {
-    fun toGraphData() = GraphData(
-        nodes = nodes.map { it.toNodeData() },
-        edges = edges.map { it.toEdgeData() }
-    )
+    fun toGraphData(): GraphData {
+        val nodes = nodes.map { it.toNodeData() }
+        val edges = edges.mapNotNull { it.toEdgeData(nodes = nodes) }
+
+        return GraphData(
+            nodes = nodes,
+            edges = edges
+        )
+    }
+
 }

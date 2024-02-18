@@ -4,19 +4,19 @@ import gvgulov.knowledgegraph.dto.EdgeDataDto
 import java.util.*
 
 data class EdgeData(
-    val id: String = UUID.randomUUID().toString(),
     val label: String,
-    val properties: List<PropertyData>,
     val source: NodeData,
     val target: NodeData,
+    val properties: List<PropertyData> = emptyList(),
+    val id: String = UUID.randomUUID().toString(),
 ) {
 
     fun toDto() = EdgeDataDto(
         id = id,
         label = label,
         properties = properties.map { it.toDto() },
-        sourceNode = source.toDto(),
-        targetNode = target.toDto()
+        sourceNode = source.id,
+        targetNode = target.id
     )
 
     override fun toString(): String = """

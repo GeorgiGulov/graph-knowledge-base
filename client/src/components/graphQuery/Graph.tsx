@@ -8,7 +8,7 @@ import {nodeInfoSlice} from "../../store/reducers/NodeInfoSlice";
 import MuRadioButton from "../UI/MuRadioButton";
 import {INode} from "../../entity/graphQuery/INode";
 import MyButton from "../UI/MyButton";
-import {Pageable, queryApi, QueryExecute} from "../../services/QueryService";
+import {executeGraph, getAllGraphData, Pageable} from "../../services/QueryService";
 import {GraphQueryDto} from "../../dto/queryDto/GraphQueryDto";
 import MyInput from "../UI/MyInput";
 import {NodeQueryDto} from "../../dto/queryDto/NodeQueryDto";
@@ -18,6 +18,7 @@ import {GraphDataDto} from "../../dto/graphDto/GraphDataDto";
 import {IProperty} from "../../entity/graphQuery/IProperty";
 import {IEdge} from "../../entity/graphQuery/IEdge";
 import {IGraph} from "../../entity/graphQuery/IGraph";
+import {dtoGraphDataToIGraph} from "../../dto/convert/DtoGraphDataToIGraph";
 
 const Graph = () => {
 
@@ -41,43 +42,60 @@ const Graph = () => {
 
 
     const dispatch = useAppDispatch()
-    const [getQuery] = queryApi.useFetchGraphQueryMutation()
+    //const [getQuery] = queryApi.useFetchGraphQueryMutation()
 
 
     useEffect(() => {
 
         console.log("useEffectOnce")
 
-        const nodes = new DataSet([
-            ...listNodes
-        ]);
+        async function allGraphData() {
+            let graphDto: GraphDataDto = {
+                nodes: [],
+                edges: [],
+            } as GraphDataDto
 
-        const edges = new DataSet([
-            ...listEdges
-        ]);
+            try {
+                graphDto = await getAllGraphData()
+            } catch (e) {
+                console.log("Ошибка при получении ответа на графовый запрос")
+            }
 
-        // @ts-ignore
-        const container: HTMLElement = document.getElementById("mynetwork");
+            let graph = dtoGraphDataToIGraph(graphDto)
 
-        const data = {
-            nodes,
-            edges
+            const nodes = new DataSet([
+                ...graph.nodes
+            ]);
+
+            const edges = new DataSet([
+                ...graph.edges
+            ]);
+
+            // @ts-ignore
+            const container: HTMLElement = document.getElementById("mynetwork");
+
+            const data = {
+                nodes,
+                edges
+            }
+
+            const options = {
+                width: "600px",
+                height: "600px",
+                nodes: {
+                    shape: 'dot'
+                },
+                edges: {
+                    smooth: false
+                },
+                interaction: {hover: true}
+            }
+            dispatch(setGraph(graph))
+            // @ts-ignore
+            setNetwork(new Network(container, data, options))
         }
 
-        const options = {
-            width: "600px",
-            height: "600px",
-            nodes: {
-                shape: 'dot'
-            },
-            edges: {
-                smooth: false
-            },
-            interaction: {hover: true}
-        }
-
-        // @ts-ignore
-        setNetwork(new Network(container, data, options))
+        allGraphData()
 
     }, []);
 
@@ -307,8 +325,8 @@ const Graph = () => {
                             id: edgeReducer.id,
                             label: edgeReducer.label,
                             properties: [],
-                            sourceNode: sourceNode,
-                            targetNode: targetNode
+                            sourceNode: sourceNode.id,
+                            targetNode: targetNode.id
                         }
 
                         return edge
@@ -322,66 +340,26 @@ const Graph = () => {
                     edges: edges as EdgeQueryDto[]
                 }
 
-                const query = {
-                    query: queryGraph,
-                    pageable: pageable
-                } as QueryExecute
-
                 let graphDto: GraphDataDto | null = null
 
                 try {
-                    const data = await getQuery(query)
-
-                    // @ts-ignore
-                    graphDto = data.data
+                    graphDto = await executeGraph(queryGraph, pageable)
                 } catch (e) {
                     console.log("Ошибка при получении ответа на графовый запрос")
                 }
 
                 if (graphDto != null) {
-                    const newNode = graphDto.nodes.map((node) => {
-                        const nodeReducer: INode = {
-                            id: node.id,
-                            label: node.label,
-                            property: node.properties.map((propertyDto) => {
-                                const property: IProperty = {
-                                    id: propertyDto.id,
-                                    label: propertyDto.label,
-                                    value: propertyDto.value
-                                }
-                                return property
-                            })
-                        }
-                        return nodeReducer
-                    })
 
-                    const newEdge = graphDto.edges.map((edge) => {
-                        const edgeReducer: IEdge = {
-                            id: edge.id,
-                            label: edge.label,
-                            from: edge.sourceNode.id,
-                            to: edge.targetNode.id,
-                        }
-                        return edgeReducer
-                    })
-
-
-                    console.log(newNode)
-                    console.log(newEdge)
-
-                    const graph: IGraph = {
-                        nodes: newNode,
-                        edges: newEdge,
-                    }
+                    const graph: IGraph = dtoGraphDataToIGraph(graphDto)
 
                     if (network != null) {
 
                         const nodes = new DataSet([
-                            ...newNode
+                            ...graph.nodes
                         ]);
 
                         const edges = new DataSet([
-                            ...newEdge
+                            ...graph.edges
                         ]);
 
                         const data = {

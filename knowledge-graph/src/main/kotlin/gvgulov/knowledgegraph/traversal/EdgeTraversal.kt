@@ -1,6 +1,7 @@
 package gvgulov.knowledgegraph.traversal
 
 import gvgulov.knowledgegraph.entity.EdgeData
+import gvgulov.knowledgegraph.entity.NodeData
 import gvgulov.knowledgegraph.entity.PropertyData
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
@@ -22,19 +23,41 @@ fun GraphTraversalSource.addEdge(
 }
 
 
+//fun GraphTraversal<Vertex, Vertex>.edge(
+//    searchEdge: EdgeData
+//): GraphTraversal<Vertex, Vertex> =
+//    this
+//        .node(searchEdge.source)
+//        .`as`(searchEdge.source.id)
+//        .select<Vertex>(searchEdge.source.id)
+//        .outE()
+//        .hasLabel(searchEdge.label)
+//        .properties(searchEdge.properties)
+//        .inV()
+//        .node(searchEdge.target)
+//        .`as`(searchEdge.target.id)
+
+
 fun GraphTraversal<Vertex, Vertex>.edge(
-    searchEdge: EdgeData
+    searchEdge: EdgeData,
+    nodeSource: NodeData,
 ): GraphTraversal<Vertex, Vertex> =
-    this
-        .node(searchEdge.source)
-        .`as`(searchEdge.source.id)
-        .select<Vertex>(searchEdge.source.id)
-        .outE()
-        .hasLabel(searchEdge.label)
-        .properties(searchEdge.properties)
-        .inV()
-        .node(searchEdge.target)
-        .`as`(searchEdge.target.id)
+    if (nodeSource.id == searchEdge.source.id) {
+        this
+            .outE()
+            //.hasLabel(searchEdge.label)
+            //.properties(searchEdge.properties)
+            .inV()
+            .node(searchEdge.target)
+    } else {
+        this
+            .inE()
+            //.hasLabel(searchEdge.label)
+            //.properties(searchEdge.properties)
+            .outV()
+            .node(searchEdge.source)
+    }
+
 
 
 fun GraphTraversal<Vertex, Edge>.properties(properties: List<PropertyData>) = this.apply {

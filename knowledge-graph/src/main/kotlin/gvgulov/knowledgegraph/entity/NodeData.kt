@@ -4,9 +4,9 @@ import gvgulov.knowledgegraph.dto.NodeDataDto
 import java.util.*
 
 data class NodeData(
-     val id: String = UUID.randomUUID().toString(),
      val label: String,
-     val properties: List<PropertyData>
+     val properties: List<PropertyData>,
+     val id: String = UUID.randomUUID().toString(),
 )  {
 
     fun toDto() = NodeDataDto(

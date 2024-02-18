@@ -12,18 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class UserService : UserDetailsService {
-    @Autowired
-    lateinit var repository: UserRepository
-
-    @PostConstruct
-    fun createTestUser() {
-        val user = UserEntity(
-            username = "test",
-            password = "test"
-        )
-        repository.save(user)
-    }
+class UserService(
+    val repository: UserRepository
+) : UserDetailsService {
 
     fun createNewUser(user: UserEntity) {
         repository.save(user)

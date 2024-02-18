@@ -9,13 +9,12 @@ import org.springframework.web.servlet.ModelAndView
 
 
 @Controller
-@RequestMapping("/auth")
+@RequestMapping()
 class AuthController {
-
-    @GetMapping("/login")
+    @GetMapping("/auth/login")
     fun loginPage(): String = "login"
 
-    @GetMapping("/successfulLogin")
+    @GetMapping("/auth/successfulLogin")
     fun successfulLogin(response: HttpServletResponse) = ModelAndView("redirect:http://localhost:3000");
 
 }

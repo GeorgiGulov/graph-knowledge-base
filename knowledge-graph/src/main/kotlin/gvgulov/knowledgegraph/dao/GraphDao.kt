@@ -5,18 +5,18 @@ import gvgulov.knowledgegraph.entity.GraphData
 import gvgulov.knowledgegraph.traversal.addEdge
 import gvgulov.knowledgegraph.traversal.addNode
 import gvgulov.knowledgegraph.utils.getLogger
-import knowledgegraph.server.database.graph.query
-import org.springframework.beans.factory.annotation.Autowired
+import gvgulov.knowledgegraph.traversal.query
+import gvgulov.knowledgegraph.traversal.toGraphData
 import org.springframework.stereotype.Service
 
 @Service
-class GraphDao {
-
-    @Autowired
-    lateinit var connection: GraphConnection
+class GraphDao(
+    val connection: GraphConnection
+) {
     private val logger = getLogger()
 
     fun saveGraph(newGraph: GraphData) {
+        logger.info("Saving graph [nodes: ${newGraph.nodes.size}; edges: ${newGraph.edges.size}]")
         val traversal = connection.traversal
 
         val mapNode = newGraph.nodes.associateWith { node ->
@@ -25,7 +25,7 @@ class GraphDao {
 
         newGraph.edges.forEach { newEdge ->
             val newSourceId = mapNode[newEdge.source]
-            val newTargetId = mapNode[newEdge.source]
+            val newTargetId = mapNode[newEdge.target]
 
             if (newSourceId != null && newTargetId != null) {
                 val edge = newEdge.copy(
@@ -42,5 +42,8 @@ class GraphDao {
 
     fun executeQuery(queryGraph: GraphData): GraphData =
         connection.traversal.query(queryGraph = queryGraph)
+
+    fun getAllData(): GraphData =
+        (connection.traversal.V().toList() + connection.traversal.E().toList()).toGraphData()
 
 }
