@@ -1,7 +1,7 @@
 package gvgulov.knowledgegraph.traversal
 
-import gvgulov.knowledgegraph.entity.NodeData
-import gvgulov.knowledgegraph.entity.PropertyData
+import gvgulov.knowledgegraph.graphEntity.NodeData
+import gvgulov.knowledgegraph.graphEntity.PropertyData
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource
 import org.apache.tinkerpop.gremlin.structure.Vertex

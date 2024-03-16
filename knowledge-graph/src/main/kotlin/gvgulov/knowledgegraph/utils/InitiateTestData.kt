@@ -1,10 +1,10 @@
 package gvgulov.knowledgegraph.utils
 
-import gvgulov.knowledgegraph.database.model.UserEntity
-import gvgulov.knowledgegraph.entity.EdgeData
-import gvgulov.knowledgegraph.entity.GraphData
-import gvgulov.knowledgegraph.entity.NodeData
-import gvgulov.knowledgegraph.entity.PropertyData
+import gvgulov.knowledgegraph.database.entity.UserEntity
+import gvgulov.knowledgegraph.graphEntity.EdgeData
+import gvgulov.knowledgegraph.graphEntity.GraphData
+import gvgulov.knowledgegraph.graphEntity.NodeData
+import gvgulov.knowledgegraph.graphEntity.PropertyData
 import gvgulov.knowledgegraph.loader.DataLoader
 import gvgulov.knowledgegraph.service.UserService
 import jakarta.annotation.PostConstruct

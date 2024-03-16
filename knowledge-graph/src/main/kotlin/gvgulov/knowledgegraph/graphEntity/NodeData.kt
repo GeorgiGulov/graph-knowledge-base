@@ -1,4 +1,4 @@
-package gvgulov.knowledgegraph.entity
+package gvgulov.knowledgegraph.graphEntity
 
 import gvgulov.knowledgegraph.dto.NodeDataDto
 import java.util.*

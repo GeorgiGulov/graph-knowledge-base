@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.dto
 
-import gvgulov.knowledgegraph.entity.PropertyData
+import gvgulov.knowledgegraph.graphEntity.PropertyData
 
 data class PropertyDataDto(
     val id: String,

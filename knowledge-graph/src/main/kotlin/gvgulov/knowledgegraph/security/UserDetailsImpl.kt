@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.security
 
-import gvgulov.knowledgegraph.database.model.UserEntity
+import gvgulov.knowledgegraph.database.entity.UserEntity
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

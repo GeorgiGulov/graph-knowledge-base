@@ -1,7 +1,7 @@
 package gvgulov.knowledgegraph.dto
 
-import gvgulov.knowledgegraph.entity.EdgeData
-import gvgulov.knowledgegraph.entity.NodeData
+import gvgulov.knowledgegraph.graphEntity.EdgeData
+import gvgulov.knowledgegraph.graphEntity.NodeData
 import gvgulov.knowledgegraph.utils.getLogger
 import java.util.*
 

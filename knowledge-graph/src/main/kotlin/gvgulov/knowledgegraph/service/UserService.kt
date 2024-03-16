@@ -1,11 +1,9 @@
 package gvgulov.knowledgegraph.service
 
-import gvgulov.knowledgegraph.database.model.UserEntity
-import gvgulov.knowledgegraph.repository.UserRepository
+import gvgulov.knowledgegraph.database.entity.UserEntity
+import gvgulov.knowledgegraph.repository.user.UserRepository
 import gvgulov.knowledgegraph.security.UserDetailsImpl
-import jakarta.annotation.PostConstruct
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

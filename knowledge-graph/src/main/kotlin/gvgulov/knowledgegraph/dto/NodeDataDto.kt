@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.dto
 
-import gvgulov.knowledgegraph.entity.NodeData
+import gvgulov.knowledgegraph.graphEntity.NodeData
 import java.util.*
 
 data class NodeDataDto(

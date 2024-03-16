@@ -1,7 +1,7 @@
 package gvgulov.knowledgegraph.dao
 
 import gvgulov.knowledgegraph.component.GraphConnection
-import gvgulov.knowledgegraph.entity.GraphData
+import gvgulov.knowledgegraph.graphEntity.GraphData
 import gvgulov.knowledgegraph.traversal.addEdge
 import gvgulov.knowledgegraph.traversal.addNode
 import gvgulov.knowledgegraph.utils.getLogger

@@ -33,9 +33,5 @@ class GraphController(
     @GetMapping("allData")
     fun getAllData(): GraphDataDto = graphDao.getAllData().toDto()
 
-    @GetMapping("test")
-    fun test(): String {
-        return "123"
-    }
 
 }

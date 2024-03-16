@@ -1,29 +1,91 @@
 package gvgulov.knowledgegraph.service
 
-import gvgulov.knowledgegraph.database.model.PopularityEntity
-import gvgulov.knowledgegraph.repository.PopularityEntityRepository
+import gvgulov.knowledgegraph.database.entity.popularity.EdgePopularityEntity
+import gvgulov.knowledgegraph.database.entity.popularity.NodePopularityEntity
+import gvgulov.knowledgegraph.database.entity.popularity.PropertyPopularityEntity
+import gvgulov.knowledgegraph.graphEntity.GraphData
+import gvgulov.knowledgegraph.repository.popularity.EdgePopularityRepository
+import gvgulov.knowledgegraph.repository.popularity.NodePopularityRepository
+import gvgulov.knowledgegraph.repository.popularity.PropertyPopularityRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
 @Service
 class PopularityEntityService(
-    val repository: PopularityEntityRepository
+    val nodeRepository: NodePopularityRepository,
+    val edgeRepository: EdgePopularityRepository,
+    val propertyRepository: PropertyPopularityRepository,
 ) {
     @Transactional
-    fun incrementPopularity(label: String) {
-        val currentPopularity = findByLabel(label)
+    fun incrementPopularity(graph: GraphData) {
+        val nodes = graph.nodes.groupBy { node ->
+            node.label
+        }.map {
+            it.key to it.value.size
+        }.toMap()
 
-        if (currentPopularity != null) {
-            val newSize = currentPopularity.size + 1
-            repository.save(currentPopularity.copy(size = newSize))
-        } else {
-            val newEntity = PopularityEntity(label = label, size = 1)
-            repository.save(newEntity)
+        val edges = graph.edges.groupBy { edge ->
+            edge.label
+        }.map {
+            it.key to it.value.size
+        }.toMap()
+
+        val properties = graph.nodes
+            .flatMap { node ->
+                node.properties
+            }.groupBy { property ->
+                property.label
+            }.map {
+                it.key to it.value.size
+            }.toMap()
+
+
+        nodes.forEach { labelToSize ->
+            val nodePopularity = nodeRepository.findById(labelToSize.key).takeIf { it.isPresent }?.get()
+
+            if (nodePopularity == null) {
+                val entity = NodePopularityEntity(
+                    label = labelToSize.key,
+                    size = labelToSize.value
+                )
+                nodeRepository.save(entity)
+            } else {
+                nodePopularity.size += labelToSize.value
+            }
+
         }
+
+        edges.forEach { labelToSize ->
+            val edgePopularity = edgeRepository.findById(labelToSize.key).takeIf { it.isPresent }?.get()
+
+            if (edgePopularity == null) {
+                val entity = EdgePopularityEntity(
+                    label = labelToSize.key,
+                    size = labelToSize.value
+                )
+                edgeRepository.save(entity)
+            } else {
+                edgePopularity.size += labelToSize.value
+            }
+
+        }
+
+        properties.forEach { labelToSize ->
+            val propertyPopularity = propertyRepository.findById(labelToSize.key).takeIf { it.isPresent }?.get()
+
+            if (propertyPopularity == null) {
+                val entity = PropertyPopularityEntity(
+                    label = labelToSize.key,
+                    size = labelToSize.value
+                )
+                propertyRepository.save(entity)
+            } else {
+                propertyPopularity.size += labelToSize.value
+            }
+
+        }
+
     }
 
-
-    fun findByLabel(label: String): PopularityEntity? =
-        repository.findByLabel(label).takeIf { it.isPresent }?.get()
 
 }

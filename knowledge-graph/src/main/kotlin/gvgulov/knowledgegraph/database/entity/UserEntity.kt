@@ -1,4 +1,4 @@
-package gvgulov.knowledgegraph.database.model
+package gvgulov.knowledgegraph.database.entity
 
 import gvgulov.knowledgegraph.database.annotation.AllOpen
 import gvgulov.knowledgegraph.database.annotation.NoArguments
