@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.graphEntity
 
-import gvgulov.knowledgegraph.dto.EdgeDataDto
+import gvgulov.knowledgegraph.dto.graph.EdgeDataDto
 import java.util.*
 
 data class EdgeData(

@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.graphEntity
 
-import gvgulov.knowledgegraph.dto.PropertyDataDto
+import gvgulov.knowledgegraph.dto.graph.PropertyDataDto
 import java.util.*
 
 data class PropertyData(

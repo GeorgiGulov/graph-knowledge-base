@@ -8,6 +8,7 @@ import gvgulov.knowledgegraph.repository.popularity.EdgePopularityRepository
 import gvgulov.knowledgegraph.repository.popularity.NodePopularityRepository
 import gvgulov.knowledgegraph.repository.popularity.PropertyPopularityRepository
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -87,5 +88,12 @@ class PopularityEntityService(
 
     }
 
+    @Transactional
+    fun getPopularityNodes() = nodeRepository.findByOrderBySize()
 
+    @Transactional
+    fun getPopularityEdges() = edgeRepository.findByOrderBySize()
+
+    @Transactional
+    fun getPopularityProperties() = propertyRepository.findByOrderBySize()
 }

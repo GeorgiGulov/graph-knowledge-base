@@ -1,7 +1,7 @@
 package gvgulov.knowledgegraph.contollers
 
 import gvgulov.knowledgegraph.dao.GraphDao
-import gvgulov.knowledgegraph.dto.GraphDataDto
+import gvgulov.knowledgegraph.dto.graph.GraphDataDto
 import gvgulov.knowledgegraph.loader.DataLoader
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

@@ -1,6 +1,6 @@
 package gvgulov.knowledgegraph.graphEntity
 
-import gvgulov.knowledgegraph.dto.GraphDataDto
+import gvgulov.knowledgegraph.dto.graph.GraphDataDto
 
 data class GraphData(
     val nodes: List<NodeData> = listOf(),
